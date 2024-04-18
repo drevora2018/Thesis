@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4693758323298255022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4693758323298255020}
+  - component: {fileID: 4693758323298255023}
+  - component: {fileID: 4693758323298255021}
+  m_Layer: 0
+  m_Name: TruckManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4693758323298255020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4693758323298255022}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4693758323298255023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4693758323298255022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ab5f47200de294282ff98ef145436b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AutoRenameWaypoints: 0
+  IsInternal: 0
+  GizmoColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &4693758323298255021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4693758323298255022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0229d9f0a19648f9b09f6d3ac743e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TruckSpawn: {fileID: 5698046180750356870, guid: 730036df7f1ef90449863152ad32c6c6, type: 3}
+  Containers:
+  - {fileID: 6282510486798761145, guid: 7a55bc62a35ab06458ed656ff03a4661, type: 3}
+  - {fileID: 8865053870220952839, guid: bb88c46d0d0b2ae4c85aa44eebad4a71, type: 3}
+  - {fileID: 3090049137198529822, guid: a5a7ea1ad55baf044b06434cdc0d9f74, type: 3}
+  - {fileID: 9072146460383376541, guid: b3938653723392f48941988bc5309b9c, type: 3}
+  - {fileID: 6938520001633207706, guid: 080430e4c6a440f49b85ee80f51d1643, type: 3}
+  - {fileID: 1210152044472166805, guid: 1c6177726fa781041907e98a85770aa2, type: 3}
+  spawnPoint: {fileID: 0}
