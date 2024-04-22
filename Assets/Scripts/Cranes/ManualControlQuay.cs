@@ -5,6 +5,7 @@ using UnityEngine;
 public class ManualControlQuay : MonoBehaviour
 {// public CameraController cameraController;
     public PanamaxCraneMovement anotherScript;
+    public UnityFFB.UnityFFB joyControl;
 
     public GameObject Trolley;
     public GameObject Spreader;
@@ -12,8 +13,11 @@ public class ManualControlQuay : MonoBehaviour
     public GameObject Limit;
     private GameObject ControlUI;
     private GameObject CraneControlUI;
+    
+    
+    public bool KeyboardControl = false;
+    public bool JoystickControl = true;
 
-    private bool ControlEnabled = false;
 
     public Camera[] targetCameras;
     public Camera main;
@@ -55,7 +59,7 @@ public class ManualControlQuay : MonoBehaviour
         {
             cam.enabled = true;
         }
-        GetComponent<ManualControlQuay>().ControlEnabled = true;
+        GetComponent<ManualControlQuay>().KeyboardControl = true;
         InitialCranePosition = transform.position.z;
         InitialTrolleyPosition = Trolley.transform.position.x;
         InitialSpreaderPosition = Spreader.transform.position.y;
@@ -127,7 +131,7 @@ public class ManualControlQuay : MonoBehaviour
             {
                 if (hit3.collider.tag == "PanamaxCrane")
                 {
-                    hit3.collider.gameObject.GetComponent<ManualControlQuay>().ControlEnabled = true;
+                    hit3.collider.gameObject.GetComponent<ManualControlQuay>().KeyboardControl = true;
                     CraneControlUI.SetActive(true);
                     ControlUI.SetActive(false);
                 }
@@ -144,167 +148,170 @@ public class ManualControlQuay : MonoBehaviour
             }
         }
         RaycastHit hit;
-        if (ControlEnabled)
+        
+        main.GetComponent<CameraController>().enabled = false;
+        //      cameraController.enabled= false;
+        this.main.enabled = false;
+        foreach (var cam in targetCameras)
         {
-            main.GetComponent<CameraController>().enabled = false;
-            //      cameraController.enabled= false;
-            this.main.enabled = false;
-            foreach (var cam in targetCameras)
-            {
-                cam.enabled = true;
+            cam.enabled = true;
 
-            }
-            this.anotherScript.enabled = false;
-
+        }
+        this.anotherScript.enabled = false;
+        
+        if (KeyboardControl)
+        {
             if (Input.GetKey(KeyCode.W))
-            {
-                // if (Limit.transform.position.z> Trolley.transform.position.z)
-                //{
-                if (!stop3)
-                {
-
-                    Trolley.transform.position += transform.forward * Time.deltaTime * speed;
-
-                }
-
-
-                //  }
-                // W key is being pressed
+            {   // W key is being pressed
+                if (!stop3) Trolley.transform.position += transform.forward * Time.deltaTime * speed;
             }
 
             if (Input.GetKey(KeyCode.S))
             {
                 if (InitialTrolleyPosition < Trolley.transform.position.x)
-                {
+                {   // S key is being pressed
                     Trolley.transform.position += -transform.forward * Time.deltaTime * speed;
-
                 }
-                // S key is being pressed
             }
             if (Input.GetKey(KeyCode.A))
-            {
-                if (!stop1)
-                {
-
-                    // Vector3 direction = Limit.transform.position - transform.position;
-
-                    // Normalize the direction to get a unit vector (a vector of length 1)
-                    //direction.Normalize();
-                    transform.position += -transform.right * Time.deltaTime * speed;
-                    // Move the objectToMove towards the targetObject by a distance of speed * time since last frame
-                    //transform.position = Vector3.MoveTowards(transform.position, Limit.transform.position, speed * Time.deltaTime);
-                    // transform.position += Vector3.forward * Time.deltaTime * speed;
-                }
-
-
-                // A key is being pressed
+            {   // A key is being pressed
+                if (!stop1) transform.position += -transform.right * Time.deltaTime * speed;
             }
-
-
+            
             if (Input.GetKey(KeyCode.D))
-            {
-                //  if (Limit.transform.position.x < transform.position.z)
-                //{
-                if (!stop2)
-                {
-                    transform.position += transform.right * Time.deltaTime * speed;
-                }
-                // D key is being pressed
-                // }
-            }
-
-            if (Input.GetKey(KeyCode.E))
-            {
-                if (InitialSpreaderPosition > Spreader.transform.position.y)
-                {
-                    Spreader.transform.position += transform.up * Time.deltaTime * speed;
-                    Ropes.transform.localScale += RopeSpeed * speed * Time.deltaTime * Spreader.transform.up;
-                }
-                // D key is being pressed
-            }
-
-            if (Input.GetKey(KeyCode.Q) && (!Physics.Raycast(Spreader.transform.position - Spreader.transform.up * 0.2f, -Spreader.transform.up, out hit, 0.9f) ||
-                (HeldObj != null && !Physics.Raycast(new(Spreader.transform.position.x, Spreader.transform.position.y - HeldObj.GetComponent<BoxCollider>().size.y, Spreader.transform.position.z), -Spreader.transform.up, out hit, 0.8f)) || hit.collider.isTrigger || hit.collider.gameObject.CompareTag("CraneSpreader")))
-            {
-
-                Spreader.transform.position += -transform.up * Time.deltaTime * speed;
-                Ropes.transform.localScale += -RopeSpeed * speed * Time.deltaTime * Spreader.transform.up;
-                // D key is being pressed
-
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                //RaycastHit hit1;
-
-
-                //if (Physics.Raycast(Spreader.transform.position, -Spreader.transform.up, out hit1, 1.5f) && HeldObj == null)
-                //{
-                //    var obj = hit1.collider.gameObject;
-                //    if (obj.CompareTag("Container"))
-                //    {
-                //        HeldObj = obj;
-                //        HeldObj.transform.parent = Spreader.transform;
-                //        HeldObj.GetComponent<Rigidbody>().isKinematic = true;
-                //        HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0);
-                //        HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset;
-                //        LoadingSpot.LetTruckLeave();
-
-                //    }
-                //}
-
-                RaycastHit hit1;
-                if (HeldObj == null && Physics.Raycast(Spreader.transform.position - Spreader.transform.up * 0.2f, -Spreader.transform.up, out hit1, 1.5f))
-                {
-                    var obj = hit1.collider.gameObject;
-                    if (obj.CompareTag("Container") || obj.CompareTag("PickedUpContainer"))
-                    {
-                        HeldObj = obj;
-                        HeldObj.transform.parent = Spreader.transform;
-                        HeldObj.GetComponent<Rigidbody>().isKinematic = true;
-                        HeldObj.tag = "PickedUpContainer";
-                        HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0);
-                        HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset;
-                        LoadingSpot.LetTruckLeave();
-                    }
-                }
-                else
-                {
-                    HeldObj.GetComponent<Rigidbody>().isKinematic = false;
-                    HeldObj = null;
-                }
-
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.F) && HeldObj != null)
-            {
-                HeldObj.transform.parent = null;
-                HeldObj.GetComponent<Rigidbody>().isKinematic = false;
-                HeldObj = null;
-            }
-
-            if (Input.GetKey(KeyCode.C))
-            {
-
-                main.enabled = !main.enabled;
-                foreach (var cam in targetCameras)
-                {
-                    cam.enabled = !cam.enabled;
-                }
-
-                main.GetComponent<CameraController>().enabled = true;
-                anotherScript.enabled = true;
-                //ControlUI.active = false;
-                //cameraController.enabled = true;
-
-                ControlEnabled = false;
-
-                CraneControlUI.SetActive(false);
-                ControlUI.SetActive(true);
+            {   // D key is being pressed
+                if (!stop2) transform.position += transform.right * Time.deltaTime * speed;
             }
         }
-    }
+        if (JoystickControl)
+        {
+            if (-joyControl.Axis_X > 0)
+            {
+                if (!stop1)
+                {   
+                    transform.position += new Vector3(
+                        0, 
+                        0, 
+                        -joyControl.Axis_X * Time.deltaTime * speed
+                    );;
+                }
+            }
+            else
+            {
+                if (!stop2)
+                {   
+                    transform.position += new Vector3(
+                        0, 
+                        0, 
+                        -joyControl.Axis_X * Time.deltaTime * speed
+                    );;
+                }
+            }
+            
+            if (-joyControl.Axis_Y > 0)
+            {
+                if (!stop3)
+                {   
+                    Trolley.transform.position += new Vector3(
+                        -joyControl.Axis_Y * Time.deltaTime * speed, 
+                        0, 
+                        0
+                    );;
+                }
+            }
+            else
+            {
+                if (InitialTrolleyPosition < Trolley.transform.position.x)
+                {   
+                    Trolley.transform.position += new Vector3(
+                        -joyControl.Axis_Y * Time.deltaTime * speed, 
+                        0, 
+                        0
+                    );;
+                }
+            }
+        }
+        if (Input.GetKey(KeyCode.E)) 
+        { 
+            if (InitialSpreaderPosition > Spreader.transform.position.y) 
+            { 
+                Spreader.transform.position += transform.up * Time.deltaTime * speed; 
+                Ropes.transform.localScale += RopeSpeed * speed * Time.deltaTime * Spreader.transform.up;
+                
+            }
+        }
 
+        if (Input.GetKey(KeyCode.Q) && (!Physics.Raycast(Spreader.transform.position - Spreader.transform.up * 0.2f, -Spreader.transform.up, out hit, 0.9f) || 
+            (HeldObj != null && !Physics.Raycast(new(Spreader.transform.position.x, Spreader.transform.position.y - HeldObj.GetComponent<BoxCollider>().size.y, Spreader.transform.position.z), -Spreader.transform.up, out hit, 0.8f)) || hit.collider.isTrigger || hit.collider.gameObject.CompareTag("CraneSpreader")))
+        { 
+            Spreader.transform.position += -transform.up * Time.deltaTime * speed; 
+            Ropes.transform.localScale += -RopeSpeed * speed * Time.deltaTime * Spreader.transform.up;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            /*
+            RaycastHit hit1; 
+            if (Physics.Raycast(Spreader.transform.position, -Spreader.transform.up, out hit1, 1.5f) && HeldObj == null) 
+            { 
+                var obj = hit1.collider.gameObject; 
+                if (obj.CompareTag("Container")) 
+                { 
+                    HeldObj = obj; 
+                    HeldObj.transform.parent = Spreader.transform; 
+                    HeldObj.GetComponent<Rigidbody>().isKinematic = true; 
+                    HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0); 
+                    HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset; 
+                    LoadingSpot.LetTruckLeave();
+                    
+                    
+                }
+            }
+            */
+            RaycastHit hit1;
+            if (HeldObj == null && Physics.Raycast(Spreader.transform.position - Spreader.transform.up * 0.2f, -Spreader.transform.up, out hit1, 1.5f))
+            {
+                var obj = hit1.collider.gameObject;
+                if (obj.CompareTag("Container") || obj.CompareTag("PickedUpContainer")) 
+                { 
+                    HeldObj = obj; 
+                    HeldObj.transform.parent = Spreader.transform; 
+                    HeldObj.GetComponent<Rigidbody>().isKinematic = true; 
+                    HeldObj.tag = "PickedUpContainer"; 
+                    HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0); 
+                    HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset; 
+                    LoadingSpot.LetTruckLeave();
+                }
+            }
+            else 
+            { 
+                HeldObj.GetComponent<Rigidbody>().isKinematic = false; 
+                HeldObj = null;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.F) && HeldObj != null) 
+        { 
+            HeldObj.transform.parent = null; 
+            HeldObj.GetComponent<Rigidbody>().isKinematic = false; 
+            HeldObj = null;
+        }
+
+        if (Input.GetKey(KeyCode.C)) 
+        { 
+            main.enabled = !main.enabled; 
+            foreach (var cam in targetCameras) 
+            { 
+                cam.enabled = !cam.enabled;
+            }
+            
+            main.GetComponent<CameraController>().enabled = true; 
+            anotherScript.enabled = true; 
+            //ControlUI.active = false;
+            ////cameraController.enabled = true;
+            /// 
+            KeyboardControl = false;
+            CraneControlUI.SetActive(false); 
+            ControlUI.SetActive(true);
+        }
+    }
 }

@@ -1,0 +1,6 @@
+﻿  unity-ffb.cpp
+C:\Users\abdab\My project (1)\Assets\Packages\UnityFFB\PluginSource~\unity-ffb.cpp(48,21): warning C4244: '=': conversion from 'LONG' to 'float', possible loss of data
+C:\Users\abdab\My project (1)\Assets\Packages\UnityFFB\PluginSource~\unity-ffb.cpp(49,21): warning C4244: '=': conversion from 'LONG' to 'float', possible loss of data
+  unity-ffb.vcxproj -> C:\Users\abdab\My project (1)\Assets\Packages\UnityFFB\PluginSource~\x64\Debug\UNITYFFB.dll
+  C:\Users\abdab\My project (1)\Assets\Packages\UnityFFB\PluginSource~\x64\Debug\UNITYFFB.dll -> C:\Users\abdab\My project (1)\Assets\Packages\UnityFFB\Runtime\Plugins\x86_64\UNITYFFB.dll
+  1 File(s) copied
