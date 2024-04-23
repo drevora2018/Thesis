@@ -9,6 +9,7 @@ using UnityEngine;
 public class AccuracyFinder : MonoBehaviour
 {
     [Range(1,10)]public int TargetContainers;
+    public CollisionDetection CollisionDetection;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,23 @@ public class AccuracyFinder : MonoBehaviour
 
         streamWriter.Flush();
         streamWriter.WriteLine($"\nTime Elapsed for Task: {Time.Minutes} minutes, {Time.Seconds} Seconds");
+        streamWriter.Flush();
+        streamWriter.WriteLine("Collisions:");
+        for (int i = 0; i < CollisionDetection.collisions.Count; i++)
+        {
+            if (CollisionDetection.collisions[i] > 45)
+            {
+                streamWriter.Write($"\nCollision #{i} (SEVERE HIT): {CollisionDetection.collisions[i]} units of magnitude");
+            }
+            else if (CollisionDetection.collisions[i] < 45 && CollisionDetection.collisions[i] > 15)
+            {
+                streamWriter.Write($"\nCollision #{i} (MODERATE HIT): {CollisionDetection.collisions[i]} units of magnitude");
+            }
+            else
+            {
+                streamWriter.Write($"\nCollision #{i} (LOW HIT): {CollisionDetection.collisions[i]} units of magnitude");
+            }
+        }
         streamWriter.Close();
     }
 }

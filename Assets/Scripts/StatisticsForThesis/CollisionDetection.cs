@@ -10,6 +10,8 @@ public class CollisionDetection : MonoBehaviour
     public UnityFFB.UnityFFB joyControl;
     public float speed = 10;
 
+    public List<double> collisions = new List<double>();
+
 
     private void Start()
     {
@@ -30,7 +32,7 @@ public class CollisionDetection : MonoBehaviour
         var CollisionsMagnitude = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2)) / Time.deltaTime;
         if (collision.gameObject.CompareTag("PickedUpContainer"))
         {
-            print("Collision Data: Collision Magnitude "+ CollisionsMagnitude);
+            collisions.Add(CollisionsMagnitude);
         }
     }
 }

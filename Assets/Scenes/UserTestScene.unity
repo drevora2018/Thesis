@@ -380,7 +380,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21701563}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 93704b7c90c5a0e4e9ef9f7842567d96, type: 3}
@@ -523,7 +523,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26793775}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d60447f90d563bd4da6fceef7aff44de, type: 3}
@@ -10073,6 +10073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetContainers: 2
+  CollisionDetection: {fileID: 1990151665}
 --- !u!1 &1648387983
 GameObject:
   m_ObjectHideFlags: 0
@@ -11943,7 +11944,7 @@ MonoBehaviour:
   HighLightPreFab: {fileID: 8303623644759469809, guid: a55ebe8f1d076d742a105be10227a321, type: 3}
   MinX: -75
   MaxX: 75
-  MaxY: 90
+  MaxY: 80
   angle: 0
   AccuracyFinder: {fileID: 0}
 --- !u!65 &1990151659
@@ -12028,8 +12029,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LowerBound: 0
-  joyControl: {fileID: 1990151676}
+  joyControl: {fileID: 0}
   speed: 10
+  collisions: []
 --- !u!114 &1990151666
 MonoBehaviour:
   m_ObjectHideFlags: 0
