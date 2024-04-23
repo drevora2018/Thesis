@@ -1,14 +1,13 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ManualControlQuay : MonoBehaviour
 {// public CameraController cameraController;
     public PanamaxCraneMovement anotherScript;
     public UnityFFB.UnityFFB joyControl;
-
+    
     public GameObject Trolley;
     public GameObject Spreader;
     public GameObject Ropes;
@@ -19,6 +18,7 @@ public class ManualControlQuay : MonoBehaviour
     
     public bool KeyboardControl = false;
     public bool JoystickControl = true;
+    public bool ForceFeedback   = true;
 
 
     public Camera[] targetCameras;
@@ -29,18 +29,20 @@ public class ManualControlQuay : MonoBehaviour
     private float InitialCranePosition;
     private float InitialTrolleyPosition;
     private float InitialSpreaderPosition;
-    private bool stop1, stop2, stop3, stop4 = false;
-    // private Vector3 min;
-    // private Vector3 max;
 
     public float speed = 3f;
     private float RopeSpeed = 0.052f;
 
     public TruckDropOff LoadingSpot;
-    private GameObject TruckToRemove = null;
+    public GameObject TruckToRemove = null;
 
     public GameObject HighLightPreFab;
     private GameObject highlightedTempObject;
+    
+    public float MinX = -75;
+    public float MaxX =  75;
+    public float MaxY =  90;
+
 
     /// <summary>
     /// Thesis-Specific variables
@@ -89,57 +91,13 @@ public class ManualControlQuay : MonoBehaviour
         // Vector3 pos = Plane.transform.position + (Plane.transform.localScale);
     }
     public bool IsHeldObj() { if (HeldObj != null) return true; else return false; }
-    public void DisableScript()
-    {
-        enabled = false;
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "LimitCrane")
-        {
-            print("Hey, we're touching something!");
-
-            if (other.gameObject.name == "left")
-            {
-                stop1 = true;
-            }
-            if (other.gameObject.name == "right")
-            {
-                stop2 = true;
-            }
-            //if (other.gameObject.name == "forward")
-            //{
-            //    stop3 = true;
-            //}
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "LimitCrane")
-        {
-
-            if (other.gameObject.name == "left")
-            {
-                stop1 = false;
-            }
-            if (other.gameObject.name == "right")
-            {
-                stop2 = false;
-            }
-            //if (other.gameObject.name == "forward")
-            //{
-            //    stop3 = false;
-            //}
-        }
-    }
+    public void DisableScript() => enabled = false;
 
 
 
     // Update is called once per frame
     void Update()
     {
-        
         if (startTask) { stopwatch.Start(); }
 
         if (Input.GetMouseButtonDown(0))
@@ -171,48 +129,52 @@ public class ManualControlQuay : MonoBehaviour
         
         main.GetComponent<CameraController>().enabled = false;
         //      cameraController.enabled= false;
-        this.main.enabled = false;
+        main.enabled = false;
         foreach (var cam in targetCameras)
         {
             cam.enabled = true;
 
         }
-        this.anotherScript.enabled = false;
-        
+        anotherScript.enabled = false;
+
         if (KeyboardControl)
         {
             if (Input.GetKey(KeyCode.W))
             {
-                RayCastBoundaries(true);
-
-                if (!stop3) Trolley.transform.position += transform.forward * Time.deltaTime * speed;
+                if (MaxY + InitialTrolleyPosition > Trolley.transform.position.x)
+                {
+                    Trolley.transform.position += transform.forward * Time.deltaTime * speed;
+                } 
             }
 
             if (Input.GetKey(KeyCode.S))
             {
                 if (InitialTrolleyPosition < Trolley.transform.position.x)
                 {   // S key is being pressed
-
-                    RayCastBoundaries(false);
-
-                    if (!stop4) Trolley.transform.position += -transform.forward * Time.deltaTime * speed;
+                    Trolley.transform.position -= transform.forward * Time.deltaTime * speed;
                 }
             }
             if (Input.GetKey(KeyCode.A))
             {   // A key is being pressed
-                if (!stop1) transform.position += -transform.right * Time.deltaTime * speed;
+                if (InitialCranePosition + MaxX > transform.position.z)
+                {
+                    transform.position -= transform.right * Time.deltaTime * speed;
+                } 
             }
             
             if (Input.GetKey(KeyCode.D))
             {   // D key is being pressed
-                if (!stop2) transform.position += transform.right * Time.deltaTime * speed;
+                if (InitialCranePosition + MinX < transform.position.z)
+                {
+                    transform.position += transform.right * Time.deltaTime * speed;
+                } 
             }
         }
         if (JoystickControl)
         {
             if (-joyControl.Axis_X > 0)
             {
-                if (!stop1)
+                if (InitialCranePosition + MaxX > transform.position.z)
                 {   
                     transform.position += new Vector3(
                         0, 
@@ -223,7 +185,7 @@ public class ManualControlQuay : MonoBehaviour
             }
             else
             {
-                if (!stop2)
+                if (InitialCranePosition + MinX < transform.position.z)
                 {   
                     transform.position += new Vector3(
                         0, 
@@ -235,8 +197,7 @@ public class ManualControlQuay : MonoBehaviour
             
             if (-joyControl.Axis_Y > 0)
             {
-                RayCastBoundaries(true);
-                if (!stop3)
+                if (InitialTrolleyPosition + MaxY > Trolley.transform.position.x)
                 {   
                     Trolley.transform.position += new Vector3(
                         -joyControl.Axis_Y * Time.deltaTime * speed, 
@@ -257,6 +218,54 @@ public class ManualControlQuay : MonoBehaviour
                 }
             }
         }
+
+        if (ForceFeedback)
+        {
+            var target = highlightedTempObject?.transform.position;
+            if (target != null)
+            {
+                var trolley = Trolley.transform.position;
+                var X0 = trolley.z;
+                var Y0 = trolley.x * -1;
+                
+                var X1 = target?.z ?? X0;
+                var Y1 = (target?.x - 2.2) * -1 ?? Y0;
+
+                var angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
+                var distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
+                print($"Angle to Target: {angle}");
+                print($"Distance to Target: {distance}");
+                joyControl.angle = angle;
+                switch (distance)
+                {
+                    case > 3:
+                        joyControl.force = 9000;
+                        break;
+                    case > 2:
+                        joyControl.force = 8000;
+                        break;
+                    case > 1:
+                        joyControl.force = 7000;
+                        break;
+                    case > 0.5:
+                        joyControl.force = 6000;
+                        break;
+                    case > 0.1:
+                        joyControl.force = 2000;
+                        break;
+                    case > 0.01:
+                        joyControl.force = 1000;
+                        break;
+                    case > 0.001:
+                        joyControl.force = 0;
+                        break;
+                    default:
+                        joyControl.force = 10000;
+                        break;
+                }
+            }
+        }
+        
         if (Input.GetKey(KeyCode.E)) 
         { 
             if (InitialSpreaderPosition > Spreader.transform.position.y) 
@@ -360,41 +369,5 @@ public class ManualControlQuay : MonoBehaviour
             CraneControlUI.SetActive(false); 
             ControlUI.SetActive(true);
         }
-    }
-
-    /// <summary>
-    /// RayCasting for trolley movement forward or backward. Set the bool to true to look for forward, and false for backward.
-    /// Sets Stop3 for forward movement, and Stop4 for backward moment to true if we are trying to go out of bounds.
-    /// </summary>
-    /// <param name="forwardorback"></param>
-    private void RayCastBoundaries(bool forwardorback)
-    {
-        if (!forwardorback)
-        {
-            RaycastHit BackRayHit;
-            //Debug.DrawRay(Trolley.transform.position, new Vector3(1,0,0)* 10, Color.blue);
-            if (Physics.Raycast(Trolley.transform.position, new Vector3(-1, 0, 0), out BackRayHit, 1.5f))
-            {
-                if (BackRayHit.collider.CompareTag("LimitCrane"))
-                {
-                    stop4 = true;
-                }
-            }
-            else { stop4 = false; }
-        }
-        else
-        {
-            RaycastHit BackRayHit;
-            //Debug.DrawRay(Trolley.transform.position, new Vector3(1,0,0)* 10, Color.blue);
-            if (Physics.Raycast(Trolley.transform.position, new Vector3(1, 0, 0), out BackRayHit, 1.5f))
-            {
-                if (BackRayHit.collider.CompareTag("LimitCrane"))
-                {
-                    stop3 = true;
-                }
-            }
-            else { stop3 = false; }
-        }
-        
     }
 }
