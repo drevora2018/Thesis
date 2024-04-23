@@ -70,7 +70,7 @@ public class RayCastAroundCrane : MonoBehaviour
         // Check if any ray hit something and perform the desired action
         if (anyRayHit)
         {
-            Debug.Log(distanceToRay);
+            Debug.Log("Picked Up Container Distance: "+ distanceToRay);
             if (distanceToRay < 5 && distanceToRay > 2)
             {
                 if (!audioSource1.isPlaying)
@@ -87,8 +87,9 @@ public class RayCastAroundCrane : MonoBehaviour
                     audioSource2.Play();
                 }
             }
-            // Perform the action when any ray hits
-            Debug.Log("Action performed because at least one ray hit.");
+            
+                // Perform the action when any ray hits
+                Debug.Log("Action performed because at least one ray hit." + distanceToRay);
             // Add your code here to perform the desired action
         }
 

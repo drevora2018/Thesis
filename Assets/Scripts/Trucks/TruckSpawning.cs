@@ -19,7 +19,7 @@ public class TruckSpawning : MonoBehaviour
     //Link in editor to container prefabs
     public GameObject[] Containers;
 
-    GameObject ExternalTruck;
+    public GameObject ExternalTruck;
     GameObject InternalTruck;
 
     private IEnumerator InternalSpawn;

@@ -28,6 +28,7 @@ TagManager:
   - CraneSpreader
   - PickedUpContainer
   - Scripts
+  - QuaySpreader
   layers:
   - Default
   - TransparentFX

@@ -385,7 +385,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 93704b7c90c5a0e4e9ef9f7842567d96, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.835
+  m_Volume: 0.107
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -528,7 +528,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d60447f90d563bd4da6fceef7aff44de, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.835
+  m_Volume: 0.107
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1818,7 +1818,6 @@ GameObject:
   m_Component:
   - component: {fileID: 338991885}
   - component: {fileID: 338991883}
-  - component: {fileID: 338991884}
   m_Layer: 0
   m_Name: Camera1
   m_TagString: Untagged
@@ -1877,14 +1876,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &338991884
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 338991882}
-  m_Enabled: 1
 --- !u!4 &338991885
 Transform:
   m_ObjectHideFlags: 0
@@ -6257,9 +6248,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4472639627682728302, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8660062444786936929, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
       propertyPath: m_UseGravity
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9046316555872373085, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8660062444786936929, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
@@ -11778,6 +11777,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1516149782680308470, guid: 36afee630acc9414a99ac2d07495da09, type: 3}
+      propertyPath: m_TagString
+      value: QuaySpreader
+      objectReference: {fileID: 0}
     - target: {fileID: 4845237079010855416, guid: 36afee630acc9414a99ac2d07495da09, type: 3}
       propertyPath: m_Name
       value: Panamax Crane
@@ -11868,6 +11871,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1516149782680308470, guid: 36afee630acc9414a99ac2d07495da09, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1990151659}
+    - targetCorrespondingSourceObject: {fileID: 1516149782680308470, guid: 36afee630acc9414a99ac2d07495da09, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1990151665}
   m_SourcePrefab: {fileID: 100100000, guid: 36afee630acc9414a99ac2d07495da09, type: 3}
 --- !u!1 &1990151648 stripped
 GameObject:
@@ -11938,6 +11944,7 @@ MonoBehaviour:
   MinX: -75
   MaxX: 75
   MaxY: 80
+  angle: 0
   AccuracyFinder: {fileID: 0}
 --- !u!65 &1990151659
 BoxCollider:
@@ -12008,6 +12015,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1990151665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990151651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afc357bbba12ed43a023345d06d1bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LowerBound: 0
 --- !u!114 &1990151666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12474,7 +12494,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2046324187}
   - component: {fileID: 2046324189}
-  - component: {fileID: 2046324188}
   m_Layer: 0
   m_Name: Camera2
   m_TagString: Untagged
@@ -12497,14 +12516,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1990151671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &2046324188
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046324186}
-  m_Enabled: 1
 --- !u!20 &2046324189
 Camera:
   m_ObjectHideFlags: 0
@@ -14404,7 +14415,8 @@ PrefabInstance:
       propertyPath: TopDownCamera
       value: 
       objectReference: {fileID: 1507832556}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2524759683789396747, guid: 30fe0ade56d02f047a1f92eb77ab4c24, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -15440,6 +15452,7 @@ MonoBehaviour:
   - {fileID: 9072146460383376541, guid: b3938653723392f48941988bc5309b9c, type: 3}
   - {fileID: 6938520001633207706, guid: 080430e4c6a440f49b85ee80f51d1643, type: 3}
   - {fileID: 1210152044472166805, guid: 1c6177726fa781041907e98a85770aa2, type: 3}
+  ExternalTruck: {fileID: 0}
   SpawnRadius: 30
 --- !u!114 &5399976989683605166
 MonoBehaviour:

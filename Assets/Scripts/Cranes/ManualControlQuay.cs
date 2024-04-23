@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 
 public class ManualControlQuay : MonoBehaviour
@@ -43,6 +44,11 @@ public class ManualControlQuay : MonoBehaviour
     public float MaxX =  75;
     public float MaxY =  90;
 
+    TruckSpawning truckScript;
+    Queue<GameObject> truckQueue = new Queue<GameObject>();
+
+    public int angle;
+
 
     /// <summary>
     /// Thesis-Specific variables
@@ -72,6 +78,7 @@ public class ManualControlQuay : MonoBehaviour
           Debug.Log("Top edge: " + max.y);
           Debug.Log("Front edge: " + min.z);
           Debug.Log("Back edge: " + max.z);*/
+        truckScript = GameObject.Find("TruckManager").GetComponent<TruckSpawning>();
         AccuracyFinder = GameObject.FindGameObjectWithTag("Scripts").GetComponent<AccuracyFinder>();
 
         foreach (var cam in targetCameras)
@@ -98,6 +105,8 @@ public class ManualControlQuay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
         if (startTask) { stopwatch.Start(); }
 
         if (Input.GetMouseButtonDown(0))
@@ -231,7 +240,7 @@ public class ManualControlQuay : MonoBehaviour
                 var X1 = target?.z ?? X0;
                 var Y1 = (target?.x - 2.2) * -1 ?? Y0;
 
-                var angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
+                angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
                 var distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
                 print($"Angle to Target: {angle}");
                 print($"Distance to Target: {distance}");
@@ -325,8 +334,6 @@ public class ManualControlQuay : MonoBehaviour
             else 
             {   
                 print($"HeldObj: {HeldObj}");
-                HeldObj.GetComponent<Rigidbody>().isKinematic = false; 
-                HeldObj = null;
             }
         }
         if (Input.GetKeyDown(KeyCode.F) && HeldObj != null) 
@@ -352,22 +359,43 @@ public class ManualControlQuay : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.C)) 
-        { 
-            main.enabled = !main.enabled; 
-            foreach (var cam in targetCameras) 
-            { 
-                cam.enabled = !cam.enabled;
-            }
-            
-            main.GetComponent<CameraController>().enabled = true; 
-            anotherScript.enabled = true; 
-            //ControlUI.active = false;
-            ////cameraController.enabled = true;
-            /// 
-            KeyboardControl = false;
-            CraneControlUI.SetActive(false); 
-            ControlUI.SetActive(true);
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ContainerOnTruck();
         }
+
+        //if (Input.GetKey(KeyCode.C)) 
+        //{ 
+        //    main.enabled = !main.enabled; 
+        //    foreach (var cam in targetCameras) 
+        //    { 
+        //        cam.enabled = !cam.enabled;
+        //    }
+            
+        //    main.GetComponent<CameraController>().enabled = true; 
+        //    anotherScript.enabled = true; 
+        //    //ControlUI.active = false;
+        //    ////cameraController.enabled = true;
+        //    /// 
+        //    KeyboardControl = false;
+        //    CraneControlUI.SetActive(false); 
+        //    ControlUI.SetActive(true);
+        //}
     }
+
+    /// <summary>
+    /// Returns the container that sits on the first truck as a gameobject
+    /// </summary>
+    /// <returns>Container from first truck in queue</returns>
+    GameObject ContainerOnTruck()
+    {
+        var gameobj = GameObject.FindGameObjectsWithTag("ExternalTruck").First();
+        var container = gameobj.transform.Find("Trailer").GetChild(0).gameObject;
+
+        print(container.name);
+
+        return container;
+    }
+
+    
 }
