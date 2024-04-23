@@ -26,25 +26,25 @@ public class ContainerYardScript : MonoBehaviour
 
     private void Update()
     {
-        if (!RunOnce)
-        {
-            if (transform.parent.CompareTag("Ship"))
-            {
-                int LoadorUnload = PlayerPrefs.GetInt("isLoadMode");
+        //if (!RunOnce)
+        //{
+        //    if (transform.parent.CompareTag("Ship"))
+        //    {
+        //        int LoadorUnload = PlayerPrefs.GetInt("isLoadMode");
 
-                if (LoadorUnload == 0)
-                {
-                    var ShipStorageScript = GameObject.FindGameObjectWithTag("InitializeShip").GetComponent<InitializeShipStorage>();
-                    StartCoroutine(ShipStorageScript.InitializeShip(transform.parent.gameObject));
-                }
-            }
-            else
-            {
-                //float StartAmount = (Height * Width * Length) * PlayerPrefs.GetInt("ContainerSpawnAmount") / 100;
-                //GameObject.FindGameObjectWithTag("InitializeGroundStorageYard").GetComponent<InitializeGroundStorageYard>().SendMessage("InitializeGroundStorage", new Tuple<ContainerYardScript, float>(this, StartAmount));
-            }
-            RunOnce = true;
-        }
+        //        if (LoadorUnload == 0)
+        //        {
+        //            var ShipStorageScript = GameObject.FindGameObjectWithTag("InitializeShip").GetComponent<InitializeShipStorage>();
+        //            StartCoroutine(ShipStorageScript.InitializeShip(transform.parent.gameObject));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //float StartAmount = (Height * Width * Length) * PlayerPrefs.GetInt("ContainerSpawnAmount") / 100;
+        //        //GameObject.FindGameObjectWithTag("InitializeGroundStorageYard").GetComponent<InitializeGroundStorageYard>().SendMessage("InitializeGroundStorage", new Tuple<ContainerYardScript, float>(this, StartAmount));
+        //    }
+        //    RunOnce = true;
+        //}
     }
 
     /// <summary>

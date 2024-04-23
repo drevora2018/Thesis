@@ -31,7 +31,7 @@ public class BoatAI : MonoBehaviour
         WayPoints = GameObject.FindGameObjectsWithTag("ShipWayPoint");
         DeSpawnPoint = GameObject.FindGameObjectWithTag("ShipDespawnPoint");
         ShipManager = GameObject.FindGameObjectWithTag("ShipManager");
-        ShipWaitStatistic = GameObject.FindGameObjectWithTag("PauseCanvas").transform.GetChild(2).GetChild(5).GetComponent<ExportStatistics>();
+        //ShipWaitStatistic = GameObject.FindGameObjectWithTag("PauseCanvas").transform.GetChild(2).GetChild(5).GetComponent<ExportStatistics>();
 
         BaseSpeed = agent.speed;
         BaseAcceleration = agent.acceleration;

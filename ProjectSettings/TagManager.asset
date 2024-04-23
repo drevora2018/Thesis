@@ -27,6 +27,7 @@ TagManager:
   - LimitCrane
   - CraneSpreader
   - PickedUpContainer
+  - Scripts
   layers:
   - Default
   - TransparentFX

@@ -57,7 +57,8 @@ public class RayCastAroundCrane : MonoBehaviour
                     distanceToRay = hit.distance;
                 }
                 Debug.DrawLine(Origin, hit.point, Color.red);
-                anyRayHit = true;
+                if (hit.transform.CompareTag("PickedUpContainer"))
+                    anyRayHit = true;
             }
             else
             {
