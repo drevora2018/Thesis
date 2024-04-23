@@ -6,30 +6,24 @@ using UnityEngine;
 public class CollisionDetection : MonoBehaviour
 {
     public int LowerBound;
-    Vector3 lastpos;
     public UnityFFB.UnityFFB joyControl;
     public float speed = 10;
 
     public List<double> collisions = new List<double>();
-
-
-    private void Start()
-    {
-        lastpos = transform.position;
-    }
-
-    private void Update()
-    {
-        lastpos = transform.position;
-    }
+    
     private void OnCollisionEnter(Collision collision)
     {
-        var X0 = 0;
-        var Y0 = 0;
-        var X1 = -joyControl.Axis_X;
-        var Y1 = -joyControl.Axis_Y;
+        var vect = new Vector2(
+            Math.Abs((-joyControl.Axis_X * speed) * Time.deltaTime),
+            Math.Abs((-joyControl.Axis_Y * speed) * Time.deltaTime)
+        );
         
-        var CollisionsMagnitude = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2)) / Time.deltaTime;
+        var CollisionsMagnitude = vect.magnitude * 3000 / Time.deltaTime;
+        print($"" +
+              $"Collision Detected - Magnitude: " +
+              $"{vect.magnitude * 3000 / Time.deltaTime}. " +
+              $"Vector - X:{vect.x}, Y:{vect.y}"
+        );
         if (collision.gameObject.CompareTag("PickedUpContainer"))
         {
             collisions.Add(CollisionsMagnitude);

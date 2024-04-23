@@ -228,48 +228,54 @@ public class ManualControlQuay : MonoBehaviour
 
         if (ForceFeedback)
         {
-            var target = highlightedTempObject?.transform.position;
-            if (target != null)
-            {
-                var trolley = Trolley.transform.position;
-                var X0 = trolley.z;
-                var Y0 = trolley.x * -1;
+            Vector3 target;
+            target = HeldObj != null 
+                ? highlightedTempObject!.transform.position 
+                : ContainerOnTruck().transform.position;
+            var trolley = Trolley.transform.position;
+            var X0 = trolley.z;
+            var Y0 = trolley.x * -1;
                 
-                var X1 = target?.z ?? X0;
-                var Y1 = (target?.x - 2.2) * -1 ?? Y0;
+            var X1 = target.z;
+            var Y1 = (target.x - 2.25) * -1;
 
-                angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
-                var distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
-                print($"Angle to Target: {angle}");
-                print($"Distance to Target: {distance}");
-                joyControl.angle = angle;
-                switch (distance)
-                {
-                    case > 3:
-                        joyControl.force = 9000;
-                        break;
-                    case > 2:
-                        joyControl.force = 8000;
-                        break;
-                    case > 1:
-                        joyControl.force = 7000;
-                        break;
-                    case > 0.5:
-                        joyControl.force = 6000;
-                        break;
-                    case > 0.1:
-                        joyControl.force = 2000;
-                        break;
-                    case > 0.01:
-                        joyControl.force = 1000;
-                        break;
-                    case > 0.001:
-                        joyControl.force = 0;
-                        break;
-                    default:
-                        joyControl.force = 10000;
-                        break;
-                }
+            angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
+            var distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
+            print($"Angle to Target: {angle}");
+            print($"Distance to Target: {distance}");
+            joyControl.angle = angle;
+            switch (distance)
+            {
+                case > 3:
+                    joyControl.force = 9000;
+                    break;
+                case > 2:
+                    joyControl.force = 8000;
+                    break;
+                case > 1:
+                    joyControl.force = 7000;
+                    break;
+                case > 0.5:
+                    joyControl.force = 6000;
+                    break;
+                case > 0.1:
+                    joyControl.force = 2000;
+                    break;
+                case > 0.01:
+                    joyControl.force = 1000;
+                    break;
+                case > 0.001:
+                    joyControl.force = 500;
+                    break;
+                case > 0.0001:
+                    joyControl.force = 250;
+                    break;
+                case > 0.00001:
+                    joyControl.force = 0;
+                    break;
+                default:
+                    joyControl.force = 10000;
+                    break;
             }
         }
         
@@ -293,24 +299,6 @@ public class ManualControlQuay : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            /*
-            RaycastHit hit1; 
-            if (Physics.Raycast(Spreader.transform.position, -Spreader.transform.up, out hit1, 1.5f) && HeldObj == null) 
-            { 
-                var obj = hit1.collider.gameObject; 
-                if (obj.CompareTag("Container")) 
-                { 
-                    HeldObj = obj; 
-                    HeldObj.transform.parent = Spreader.transform; 
-                    HeldObj.GetComponent<Rigidbody>().isKinematic = true; 
-                    HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0); 
-                    HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset; 
-                    LoadingSpot.LetTruckLeave();
-                    
-                    
-                }
-            }
-            */
             RaycastHit hit1;
             if (HeldObj == null && Physics.Raycast(Spreader.transform.position - Spreader.transform.up * 0.2f, -Spreader.transform.up, out hit1, 1.5f))
             {
@@ -326,6 +314,7 @@ public class ManualControlQuay : MonoBehaviour
                     HeldObj.transform.rotation = Spreader.transform.rotation * Quaternion.Euler(0, 90, 0); 
                     HeldObj.transform.position = Spreader.transform.position - Spreader.transform.up * SpreaderUpOffset;
                     var HighLightLocation = GameObject.FindGameObjectWithTag("Ship").GetComponentInChildren<ContainerYardScript>().AskPlace();
+                    HighLightLocation += new Vector3(0, (float)-.35, 0);
                     highlightedTempObject = Instantiate(HighLightPreFab, (Vector3)HighLightLocation, Quaternion.identity);
                 }
             }
@@ -340,8 +329,10 @@ public class ManualControlQuay : MonoBehaviour
             HeldObj.transform.SetParent(null);
             HeldObj.transform.parent = null; 
             HeldObj.GetComponent<Rigidbody>().isKinematic = false;
+
             var Accuracy = Vector3.Distance(HeldObj.transform.position, highlightedTempObject.transform.position);
             Destroy(highlightedTempObject);
+            HeldObj = null;
             highlightedTempObject = null;
 
             AccuracyList.Add(Accuracy);
@@ -352,9 +343,6 @@ public class ManualControlQuay : MonoBehaviour
                 stopwatch.Stop();
                 AccuracyFinder.WriteDataToFile(AccuracyList, stopwatch.Elapsed);
             }
-
-            HeldObj = null;
-
         }
 
         if (Input.GetKeyDown(KeyCode.O))

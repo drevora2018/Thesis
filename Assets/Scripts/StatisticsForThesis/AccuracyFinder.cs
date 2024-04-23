@@ -35,7 +35,7 @@ public class AccuracyFinder : MonoBehaviour
         StreamWriter streamWriter = new StreamWriter(@"../Data/Data" + $"{DateTime.Now:yyyyMMddHHmmss}.txt");
         var formula = (1 - avg / threshold) * 100;
         formula = Math.Max(0, Math.Min(100, formula));
-        streamWriter.Write( formula + $"% Accuracy (Worst: {Accuracies.Max(x => x)}, Best: {Accuracies.Min(x => x)}) ");
+        streamWriter.Write( formula + $"% Accuracy (Worst: {Accuracies.Max(x => x),5:0.000}m, Best: {Accuracies.Min(x => x),5:0.000}m) ");
         print("Wrote to AccuracyData");
 
         streamWriter.Flush();
@@ -44,18 +44,20 @@ public class AccuracyFinder : MonoBehaviour
         streamWriter.WriteLine("Collisions:");
         for (int i = 0; i < CollisionDetection.collisions.Count; i++)
         {
-            if (CollisionDetection.collisions[i] > 45)
+            string severity;
+            switch (CollisionDetection.collisions[i])
             {
-                streamWriter.Write($"\nCollision #{i} (SEVERE HIT): {CollisionDetection.collisions[i]} units of magnitude");
+                case > 20000:
+                    severity = "(SEVERE HIT):";
+                    break;
+                case > 10000:
+                    severity = "(MODERATE HIT):";
+                    break;
+                default:
+                    severity = "(LIGHT HIT):";
+                    break;
             }
-            else if (CollisionDetection.collisions[i] < 45 && CollisionDetection.collisions[i] > 15)
-            {
-                streamWriter.Write($"\nCollision #{i} (MODERATE HIT): {CollisionDetection.collisions[i]} units of magnitude");
-            }
-            else
-            {
-                streamWriter.Write($"\nCollision #{i} (LOW HIT): {CollisionDetection.collisions[i]} units of magnitude");
-            }
+            streamWriter.Write($"\nCollision #{i:D2} {severity,-15} {CollisionDetection.collisions[i],5:0} kN");
         }
         streamWriter.Close();
     }
