@@ -99,9 +99,7 @@ public class ManualControlQuay : MonoBehaviour
     }
     public bool IsHeldObj() { if (HeldObj != null) return true; else return false; }
     public void DisableScript() => enabled = false;
-
-
-
+    
     // Update is called once per frame
     void Update()
     {
