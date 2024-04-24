@@ -227,59 +227,30 @@ public class ManualControlQuay : MonoBehaviour
                 }
             }
         }
+        Vector3 target;
+        target = HeldObj != null 
+            ? highlightedTempObject!.transform.position 
+            : ContainerOnTruck().transform.position;
+        var trolley = Trolley.transform.position;
+        var X0 = trolley.z;
+        var Y0 = trolley.x * -1;
+                
+        var X1 = target.z;
+        var Y1 = (target.x - 2.3) * -1;
+
+        angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
+        distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
 
         if (ForceFeedback)
         {
-            Vector3 target;
-            target = HeldObj != null 
-                ? highlightedTempObject!.transform.position 
-                : ContainerOnTruck().transform.position;
-            var trolley = Trolley.transform.position;
-            var X0 = trolley.z;
-            var Y0 = trolley.x * -1;
-                
-            var X1 = target.z;
-            var Y1 = (target.x - 2.25) * -1;
-
-            angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
-            distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
-            print($"Angle to Target: {angle}");
-            print($"Distance to Target: {distance}");
             joyControl.angle = angle;
-            switch (distance)
-            {
-                case > 3:
-                    joyControl.force = 9000;
-                    break;
-                case > 2:
-                    joyControl.force = 8000;
-                    break;
-                case > 1:
-                    joyControl.force = 7000;
-                    break;
-                case > 0.5:
-                    joyControl.force = 6000;
-                    break;
-                case > 0.1:
-                    joyControl.force = 2000;
-                    break;
-                case > 0.01:
-                    joyControl.force = 1000;
-                    break;
-                case > 0.001:
-                    joyControl.force = 500;
-                    break;
-                case > 0.0001:
-                    joyControl.force = 250;
-                    break;
-                case > 0.00001:
-                    joyControl.force = 0;
-                    break;
-                default:
-                    joyControl.force = 10000;
-                    break;
-            }
+            if (distance > 3) joyControl.force = 10000;
+            else joyControl.force = (int)(10000 * ((distance + 0.3) / 3));
         }
+        
+        print($"Angle to Target: {angle}");
+        print($"Distance to Target: {distance}");
+        print($"Force: {joyControl.force}");
         
         if (Input.GetKey(KeyCode.E)) 
         { 

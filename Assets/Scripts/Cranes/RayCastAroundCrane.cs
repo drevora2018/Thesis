@@ -137,9 +137,11 @@ public class RayCastAroundCrane : MonoBehaviour
 
     void BeepWhenPutDown()
     {
-        if (controlQuay.distance <= 0.5 && !TruckBeep)
+        if (controlQuay.distance > 3) PutDownBeep.Stop();
+        else if (!TruckBeep)
         {
-            if (!PutDownBeep.isPlaying) PutDownBeep.Play();
+            PutDownBeep.pitch = (float)(2.0 - (controlQuay.distance / 3.0));
+            if(!PutDownBeep.isPlaying) PutDownBeep.Play();
         }
         else { PutDownBeep.Stop();}
     }

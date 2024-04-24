@@ -380,12 +380,12 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21701563}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 93704b7c90c5a0e4e9ef9f7842567d96, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.107
+  m_Volume: 0.08
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -523,12 +523,12 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26793775}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d60447f90d563bd4da6fceef7aff44de, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.107
+  m_Volume: 0.09
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -12189,7 +12189,7 @@ MonoBehaviour:
   Ropes: {fileID: 1990151650}
   Limit: {fileID: 0}
   KeyboardControl: 1
-  JoystickControl: 0
+  JoystickControl: 1
   ForceFeedback: 1
   targetCameras:
   - {fileID: 762022870}
