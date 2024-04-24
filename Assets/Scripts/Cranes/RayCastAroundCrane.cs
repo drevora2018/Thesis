@@ -13,14 +13,23 @@ public class RayCastAroundCrane : MonoBehaviour
     public float raySpreadAngle = 45f; // Angle between each ray in degrees
     public LayerMask layerMask; // Layer mask to determine which objects the rays can hit
     public ManualControlQuay controlQuay;
+    public AudioSource PositionBeep;
+    public AudioSource PutDownBeep;
+
+    [Range(0f, 5f)]public float Margin;
+
+    bool TruckBeep;
+
 
     void Start()
     {
-        
+        TruckBeep = false;
     }
 
     private void Update()
     {
+        BeepWhenInContactWithContainer();
+        BeepWhenPutDown();
         CastRaysInCircle();
     }
 
@@ -99,5 +108,39 @@ public class RayCastAroundCrane : MonoBehaviour
             audioSource2.Stop();
         }
 
+    }
+
+    /// <summary>
+    /// Beeps when container is in good alignment with a container on a truck.
+    /// </summary>
+    void BeepWhenInContactWithContainer()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(handle.transform.position + -(transform.up * 1f), -handle.transform.up, out hit, 50f))
+        {
+            
+            var Distance = Vector3.Distance(hit.point, hit.collider.transform.position);
+            if (hit.collider.CompareTag("Container") && Distance <= Margin)
+            {
+                TruckBeep = true;
+                if (!PositionBeep.isPlaying)
+                    PositionBeep.Play();
+                print("Audio Source Playing? " + PositionBeep.isPlaying);
+            }
+            else {
+                TruckBeep = false;
+                PositionBeep.Stop();
+                print("Audio Source Playing? " + PositionBeep.isPlaying);
+            }
+        }
+    }
+
+    void BeepWhenPutDown()
+    {
+        if (controlQuay.distance <= 0.5 && !TruckBeep)
+        {
+            if (!PutDownBeep.isPlaying) PutDownBeep.Play();
+        }
+        else { PutDownBeep.Stop();}
     }
 }

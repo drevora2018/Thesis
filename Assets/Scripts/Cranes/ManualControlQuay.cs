@@ -48,6 +48,8 @@ public class ManualControlQuay : MonoBehaviour
     Queue<GameObject> truckQueue = new Queue<GameObject>();
 
     public int angle;
+    public double distance;
+
 
 
     /// <summary>
@@ -240,7 +242,7 @@ public class ManualControlQuay : MonoBehaviour
             var Y1 = (target.x - 2.25) * -1;
 
             angle = (int)((180 / Math.PI) * Math.Atan2(X1 - X0, Y1 - Y0));
-            var distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
+            distance = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
             print($"Angle to Target: {angle}");
             print($"Distance to Target: {distance}");
             joyControl.angle = angle;
@@ -345,10 +347,6 @@ public class ManualControlQuay : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            ContainerOnTruck();
-        }
 
         //if (Input.GetKey(KeyCode.C)) 
         //{ 
