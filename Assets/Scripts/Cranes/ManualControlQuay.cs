@@ -105,8 +105,6 @@ public class ManualControlQuay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-
         if (startTask) { stopwatch.Start(); }
 
         if (Input.GetMouseButtonDown(0))

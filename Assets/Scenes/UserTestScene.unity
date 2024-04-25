@@ -6614,7 +6614,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20, y: 2.22, z: 5}
+  m_Size: {x: 17.58, y: 3.52, z: 5.2}
   m_Center: {x: 0, y: -1.81, z: 2.4826436e-15}
 --- !u!4 &1990151671 stripped
 Transform:

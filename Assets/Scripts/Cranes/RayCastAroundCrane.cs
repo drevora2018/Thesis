@@ -39,30 +39,6 @@ public class RayCastAroundCrane : MonoBehaviour
         if(EnableCollisionNotification) CastRaysInCircle();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("PickedUpContainer"))
-        {
-            var target = other.transform.position;
-            var origo = gameObject.transform.position;
-
-            var X0 = origo.z;
-            var Y0 = origo.x;
-
-            var X1 = target.z;
-            var Y1 = target.x * -1;
-
-            var angle = Math.Atan2(X1 - X0, Y1 - Y0);
-            var dist = Math.Sqrt(Math.Pow(X1 - X0, 2) + Math.Pow(Y1 - Y0, 2));
-
-            var start = 3 * Math.Cos(angle);
-
-            print($"Dist: {dist}");
-            print($"Angle: {angle}");
-
-        }
-    }
-
     void CastRaysInCircle()
     {
         Vector3 Origin;
