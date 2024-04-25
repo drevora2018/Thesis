@@ -29,6 +29,7 @@ public class UserTestMenu : MonoBehaviour
         }
 
         var namePreset = PlayerPrefs.GetString("PlayerName");
+        
         if (namePreset != string.Empty)
         {
             PlayerNameInput.text = namePreset;

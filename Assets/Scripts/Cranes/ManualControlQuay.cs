@@ -228,7 +228,7 @@ public class ManualControlQuay : MonoBehaviour
             }
         }
         Vector3 target;
-        target = HeldObj != null 
+        target = HeldObj != null  
             ? highlightedTempObject!.transform.position 
             : ContainerOnTruck().transform.position;
         var trolley = Trolley.transform.position;

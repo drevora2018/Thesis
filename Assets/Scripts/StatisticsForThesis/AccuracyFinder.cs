@@ -5,15 +5,70 @@ using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class AccuracyFinder : MonoBehaviour
 {
     [Range(1,10)]public int TargetContainers;
     public CollisionDetection CollisionDetection;
 
+
     // Start is called before the first frame update
     void Start()
     {
+        var shipstorage = GameObject.Find("Ship").GetComponentInChildren<ContainerYardScript>();
+        var crane = GameObject.FindGameObjectWithTag("PanamaxCrane").GetComponent<ManualControlQuay>();
+        var audio = GameObject.FindGameObjectWithTag("PanamaxCrane").GetComponent<RayCastAroundCrane>();
+
+        shipstorage.Height = 3;
+        shipstorage.Width = 2;
+        shipstorage.Length = 2;
+
+        switch (PlayerPrefs.GetInt("Scenario"))
+        {
+            case 1: // Control Scenario
+                crane.ForceFeedback = false;
+                audio.EnableCollisionNotification = false;
+                audio.EnableGuidanceNotificaton = false;
+                break;
+            case 2: // Force Feedback Only
+                crane.ForceFeedback = true;
+                audio.EnableCollisionNotification = false;
+                audio.EnableGuidanceNotificaton = false;
+                break;
+            case 3: // Audio Guidance Only
+                crane.ForceFeedback = false;
+                audio.EnableCollisionNotification = false;
+                audio.EnableGuidanceNotificaton = true;
+                break;
+            case 4: // Audio Collisions Only
+                crane.ForceFeedback = false;
+                audio.EnableCollisionNotification = true;
+                audio.EnableGuidanceNotificaton = false;
+                break;
+            case 5: // Force Feedback and Guidance
+                crane.ForceFeedback = true;
+                audio.EnableCollisionNotification = false;
+                audio.EnableGuidanceNotificaton = true;
+                break;
+            case 6: // Force Feedback and Collision
+                crane.ForceFeedback = true;
+                audio.EnableCollisionNotification = true;
+                audio.EnableGuidanceNotificaton = false;
+                break;
+            case 7: // All Audio on
+                crane.ForceFeedback = false;
+                audio.EnableCollisionNotification = true;
+                audio.EnableGuidanceNotificaton = true;
+                break;
+            case 8: // Yes
+                crane.ForceFeedback = true;
+                audio.EnableCollisionNotification = true;
+                audio.EnableGuidanceNotificaton = true;
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
