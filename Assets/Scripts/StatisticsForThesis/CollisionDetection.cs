@@ -11,16 +11,18 @@ public class CollisionDetection : MonoBehaviour
     public float speed = 10;
 
     public List<double> collisions = new List<double>();
-    private GameObject targetMarker;
-    private GameObject originMarker;
 
 
     public double CalculateDistToCollider(Collider target)
     {
-        var contPoint = target.ClosestPointOnBounds(gameObject.transform.position);
-        var trolleyPoint = gameObject.GetComponent<Collider>().ClosestPointOnBounds(contPoint);
-        
-        return Vector3.Distance(contPoint, trolleyPoint) - .7;
+        if (target.gameObject.CompareTag("PickedUpContainer"))
+        {
+            var contPoint = target.ClosestPointOnBounds(gameObject.transform.position);
+            var trolleyPoint = gameObject.GetComponent<Collider>().ClosestPointOnBounds(contPoint);
+
+            return Vector3.Distance(contPoint, trolleyPoint) - .7;
+        }
+        return 999;
     }
 
     private void OnCollisionEnter(Collision collision)

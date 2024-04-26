@@ -95,8 +95,6 @@ public class ManualControlQuay : MonoBehaviour
         //ControlUI = GameObject.FindGameObjectWithTag("PauseCanvas").transform.GetChild(0).gameObject;
         //CraneControlUI = GameObject.FindGameObjectWithTag("PauseCanvas").transform.GetChild(3).gameObject;
 
-        ControlUI.SetActive(false);
-        CraneControlUI.SetActive(true);
         // Vector3 pos = Plane.transform.position + (Plane.transform.localScale);
     }
     public bool IsHeldObj() { if (HeldObj != null) return true; else return false; }
@@ -310,9 +308,17 @@ public class ManualControlQuay : MonoBehaviour
             print($"Added to AccuracyList: {Accuracy}");
             if (AccuracyList.Count == AccuracyFinder.TargetContainers)
             {
+                var ParentUIObj = GameObject.Find("ScenarioSelected");
+                var StatisticsCanvas = ParentUIObj.transform.Find("ScenarioFinished").gameObject;
+                var ControlUI = ParentUIObj.transform.Find("Control UI").gameObject;
+                AccuracyFinder.audio.audioSource1.enabled = false;
+                AccuracyFinder.audio.PutDownBeep.enabled = false;
+
                 startTask = false;
                 stopwatch.Stop();
-                AccuracyFinder.WriteDataToFile(AccuracyList, stopwatch.Elapsed);
+                AccuracyFinder.WriteDataToFile(AccuracyList, stopwatch.Elapsed, StatisticsCanvas, ControlUI);
+                AccuracyFinder.crane.ForceFeedback = false;
+
             }
         }
 

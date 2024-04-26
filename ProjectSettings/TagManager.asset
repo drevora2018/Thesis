@@ -29,6 +29,8 @@ TagManager:
   - PickedUpContainer
   - Scripts
   - QuaySpreader
+  - ControlUI
+  - FinishUI
   layers:
   - Default
   - TransparentFX
