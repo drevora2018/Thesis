@@ -378,7 +378,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 15cdd11bf3122b3468585467a87a8d34, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.09
+  m_Volume: 0.505
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -6582,7 +6582,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handle: {fileID: 1990151651}
   audioSource1: {fileID: 26793777}
-  audioSource2: {fileID: 21701564}
   numRays: 32
   rayDistance: 15
   raySpreadAngle: 360
@@ -6590,7 +6589,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   controlQuay: {fileID: 1990151655}
-  PositionBeep: {fileID: 845899960}
+  CollisionDetection: {fileID: 1990151665}
   PutDownBeep: {fileID: 255349789}
   EnableCollisionNotification: 0
   EnableGuidanceNotificaton: 0

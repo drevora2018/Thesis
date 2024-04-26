@@ -246,9 +246,9 @@ public class ManualControlQuay : MonoBehaviour
             else joyControl.force = (int)(10000 * ((distance + 0.3) / 3));
         }
         
-        print($"Angle to Target: {angle}");
-        print($"Distance to Target: {distance}");
-        print($"Force: {joyControl.force}");
+        //print($"Angle to Target: {angle}");
+        //print($"Distance to Target: {distance}");
+        //print($"Force: {joyControl.force}");
         
         if (Input.GetKey(KeyCode.E)) 
         { 

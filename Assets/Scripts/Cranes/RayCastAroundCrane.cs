@@ -10,14 +10,16 @@ public class RayCastAroundCrane : MonoBehaviour
 {
 
     public GameObject handle;
-    public AudioSource audioSource1, audioSource2;
+    public AudioSource audioSource1;
     public int numRays = 12; // Number of rays to cast
     public float rayDistance = 5f; // Distance for the rays
     public float raySpreadAngle = 45f; // Angle between each ray in degrees
     public LayerMask layerMask; // Layer mask to determine which objects the rays can hit
     public ManualControlQuay controlQuay;
-    public AudioSource PositionBeep;
+    public CollisionDetection CollisionDetection;
     public AudioSource PutDownBeep;
+
+    private Collider target;
 
     public bool EnableCollisionNotification, 
         EnableGuidanceNotificaton = false;
@@ -29,7 +31,7 @@ public class RayCastAroundCrane : MonoBehaviour
 
     void Start()
     {
-        audioSource1.pitch = 0;
+        audioSource1.pitch = 1;
         TruckBeep = false;
     }
 
@@ -65,15 +67,17 @@ public class RayCastAroundCrane : MonoBehaviour
             Vector3 direction = new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
 
             RaycastHit hit;
-            rayDistance = 1 + (8 * Math.Abs(direction.z));
-
-
+            rayDistance = 1 + (15 * Math.Abs(direction.z));
+            
             if (Physics.Raycast(Origin, direction, out hit, rayDistance))
             {
-                if (hit.distance < distanceToRay) distanceToRay = hit.distance;
+                anyRayHit = true;
+                if (hit.distance < distanceToRay)
+                {
+                    distanceToRay = hit.distance;
+                    target = hit.collider;
+                }
                 Debug.DrawLine(Origin, hit.point, Color.red);
-                if (hit.transform.CompareTag("PickedUpContainer"))
-                    anyRayHit = true;
             }
             else
             {
@@ -83,30 +87,19 @@ public class RayCastAroundCrane : MonoBehaviour
         }
 
         // Check if any ray hit something and perform the desired action
-        if (anyRayHit)
+        if (!anyRayHit) return;
+        var dist = CollisionDetection.CalculateDistToCollider(target: target);
+        if (dist > 2)
         {
-            Debug.Log("Picked Up Container Distance: "+ distanceToRay);
-            if (distanceToRay < 3)
-            {
-                audioSource1.pitch = (1 - +(1 / (distanceToRay / 3))) * -1;
-                if (!audioSource1.isPlaying) audioSource1.Play();
-            }
-            else
-            {
-                audioSource2.Stop();
-            }
-
-            // Perform the action when any ray hits
-            Debug.Log("Action performed because at least one ray hit." + distanceToRay);
-            // Add your code here to perform the desired action
+            if (!audioSource1.isPlaying) return;
+            print("Stopped audio");
+            audioSource1.Stop();
         }
-
         else
         {
-            audioSource1.Stop();
-            audioSource2.Stop();
+            audioSource1.pitch = (float)(1 + (1 * (1  - dist / 2)));
+            if(!audioSource1.isPlaying) audioSource1.Play();
         }
-
     }
 
     void BeepWhenPutDown()
