@@ -49,8 +49,11 @@ public class ContainerYardScript : MonoBehaviour
                     StaticDataManager.Instance.ContainersLoaded.Add(NotNullPosition);
                     Instantiate(containers[containerRandom], (Vector3)NotNullPosition, gameObject.transform.rotation);
                 }
-                StaticDataManager.Instance.pointersTakeablestatic = pointersTakeable;
-                StaticDataManager.Instance.pointersPlaceablestatic = pointersPlaceable;
+                StaticDataManager.Instance.pointersTakeablestatic = new List<Vector3Int>();
+                StaticDataManager.Instance.pointersTakeablestatic.AddRange(pointersTakeable);
+                StaticDataManager.Instance.pointersPlaceablestatic = new List<Vector3Int>();
+                StaticDataManager.Instance.pointersPlaceablestatic.AddRange(pointersPlaceable);
+
             }
             else
             {
@@ -58,8 +61,10 @@ public class ContainerYardScript : MonoBehaviour
                     int containerRandom = r.Next() % containers.Length;
                     Instantiate(containers[containerRandom], (Vector3)container, gameObject.transform.rotation);
                 }
-                pointersTakeable = StaticDataManager.Instance.pointersTakeablestatic;
-                pointersPlaceable = StaticDataManager.Instance.pointersPlaceablestatic;
+                pointersTakeable.Clear();
+                pointersTakeable.AddRange(StaticDataManager.Instance.pointersTakeablestatic);
+                pointersPlaceable.Clear();
+                pointersPlaceable.AddRange(StaticDataManager.Instance.pointersPlaceablestatic);
             }
             RunOnce = false;
         }

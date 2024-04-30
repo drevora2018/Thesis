@@ -312,7 +312,7 @@ public class ManualControlQuay : MonoBehaviour
                 var ParentUIObj = GameObject.Find("ScenarioSelected");
                 var StatisticsCanvas = ParentUIObj.transform.Find("ScenarioFinished").gameObject;
                 var ControlUI = ParentUIObj.transform.Find("Control UI").gameObject;
-                AccuracyFinder.audio.audioSource1.enabled = false;
+                AccuracyFinder.audio.audioSource.enabled = false;
                 AccuracyFinder.audio.PutDownBeep.enabled = false;
 
                 startTask = false;

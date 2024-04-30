@@ -35,65 +35,52 @@ public class AccuracyFinder : MonoBehaviour
         shipstorage.Width = 4;
         shipstorage.Length = 4;
 
-
         switch (PlayerPrefs.GetInt("Scenario"))
         {
             case 1: // Control Scenario
                 crane.ForceFeedback = false;
-                audio.EnableCollisionNotification = false;
-                audio.EnableGuidanceNotificaton = false;
+                audio.Audio1 = false;
+                audio.Audio2 = false;
                 break;
             case 2: // Force Feedback Only
                 crane.ForceFeedback = true;
-                audio.EnableCollisionNotification = false;
-                audio.EnableGuidanceNotificaton = false;
+                audio.Audio1 = false;
+                audio.Audio2 = false;
                 break;
             case 3: // Audio Guidance1
                 crane.ForceFeedback = false;
-                audio.EnableCollisionNotification = false;
-                audio.EnableGuidanceNotificaton = true;
+                audio.Audio1 = true;
+                audio.Audio2 = false;
                 break;
             case 4: // Audio Guidance2
                 crane.ForceFeedback = false;
-                audio.EnableCollisionNotification = false;
-                audio.EnableGuidanceNotificaton = true;
+                audio.Audio1 = false;
+                audio.Audio2 = true;
                 break;
             case 5: // Force Feedback and Guidance1
                 crane.ForceFeedback = true;
-                audio.EnableCollisionNotification = false;
-                audio.EnableGuidanceNotificaton = true;
+                audio.Audio1 = true;
+                audio.Audio2 = false;
                 break;
             case 6: // Force Feedback and Collision
                 crane.ForceFeedback = true;
-                audio.EnableCollisionNotification = true;
-                audio.EnableGuidanceNotificaton = false;
+                audio.Audio1 = false;
+                audio.Audio2 = true;
                 break;
             case 7: // All Audio on
-                crane.ForceFeedback = false;
-                audio.EnableCollisionNotification = true;
-                audio.EnableGuidanceNotificaton = true;
-                break;
             case 8: // Yes
-                crane.ForceFeedback = true;
-                audio.EnableCollisionNotification = true;
-                audio.EnableGuidanceNotificaton = true;
-                break;
             case 9: // Debug Scenario
+            default:
                 crane.ForceFeedback = true;
-                audio.EnableCollisionNotification = true;
-                audio.EnableGuidanceNotificaton = true;
-                crane.JoystickControl = false;
+                audio.Audio1 = true;
+                audio.Audio2 = true;
                 crane.speed = 30;
                 break;
-            default: 
-                break;
         }
-        crane.JoystickControl = false;
-        crane.KeyboardControl = true;
+        crane.JoystickControl = true;
+        crane.KeyboardControl = false;
         
-        TargetContainers = 1; //shipstorage.Height * shipstorage.Width * shipstorage.Length;
-
-
+        TargetContainers = 10; //shipstorage.Height * shipstorage.Width * shipstorage.Length;
     }
 
     // Update is called once per frame

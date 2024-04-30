@@ -5,19 +5,19 @@ public class RayCastAroundCrane : MonoBehaviour
 {
 
     public GameObject handle;
-    public AudioSource audioSource1;
+    public AudioSource audioSource;
+    public AudioSource PutDownBeep;
     public int numRays = 12; // Number of rays to cast
     public float rayDistance = 5f; // Distance for the rays
     public float raySpreadAngle = 45f; // Angle between each ray in degrees
     public LayerMask layerMask; // Layer mask to determine which objects the rays can hit
     public ManualControlQuay controlQuay;
     public CollisionDetection CollisionDetection;
-    public AudioSource PutDownBeep;
 
     private Collider target;
 
-    public bool EnableCollisionNotification, 
-        EnableGuidanceNotificaton = false;
+    public bool Audio1, 
+        Audio2 = false;
 
     [Range(0f, 5f)]public float Margin;
 
@@ -28,14 +28,16 @@ public class RayCastAroundCrane : MonoBehaviour
 
     void Start()
     {
-        audioSource1.pitch = 1;
+        audioSource.pitch = 1;
         TruckBeep = false;
     }
 
     private void Update()
     {
-        BeepWhenPutDown();
-        if(EnableCollisionNotification) CastRaysInCircle();
+        if(Audio1 || Audio2)
+        {
+            BeepWhenPutDown();
+        }
     }
 
     void CastRaysInCircle()
@@ -88,42 +90,27 @@ public class RayCastAroundCrane : MonoBehaviour
         var dist = CollisionDetection.CalculateDistToCollider(target: target);
         if (dist > 2)
         {
-            if (!audioSource1.isPlaying) return;
+            if (!audioSource.isPlaying) return;
             print("Stopped audio");
-            audioSource1.Stop();
+            audioSource.Stop();
         }
         else
         {
-            audioSource1.pitch = (float)(1 + (1 * (1  - dist / 2)));
-            if(!audioSource1.isPlaying) audioSource1.Play();
+            audioSource.pitch = (float)(1 + (1 * (1  - dist / 2)));
+            if(!audioSource.isPlaying) audioSource.Play();
         }
     }
 
     void BeepWhenPutDown()
     {
-        if(EnableGuidanceNotificaton)
+        if (Audio1) PutDownBeep.clip = Guidance1;
+        else PutDownBeep.clip = Guidance2;
+        if (controlQuay.distance > 3) PutDownBeep.Stop();
+        else if (!TruckBeep)
         {
-            if (PlayerPrefs.GetInt("Scenario") == 3)
-            {
-                PutDownBeep.clip = Guidance1;
-            }
-            else
-            {
-                PutDownBeep.clip = Guidance2;
-            }
-
-
-            if (controlQuay.distance > 3) PutDownBeep.Stop();
-            else if (!TruckBeep)
-            {
-                PutDownBeep.pitch = (float)(2.0 - (controlQuay.distance / 3.0));
-                if (!PutDownBeep.isPlaying) PutDownBeep.Play();
-            }
-            else { PutDownBeep.Stop(); }
+            PutDownBeep.pitch = (float)(2.0 - (controlQuay.distance / 3.0));
+            if (!PutDownBeep.isPlaying) PutDownBeep.Play();
         }
-        else
-        {
-            PutDownBeep.Stop();
-        }
+        else PutDownBeep.Stop();
     }
 }

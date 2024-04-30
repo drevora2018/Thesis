@@ -110,6 +110,7 @@ namespace UnityFFB
             catch (DllNotFoundException e)
             {
                 LogMissingRuntimeError();
+                throw new DllNotFoundException(e.ToString());
             }
         }
 
@@ -123,6 +124,7 @@ namespace UnityFFB
             catch (DllNotFoundException e)
             {
                 LogMissingRuntimeError();
+                throw new DllNotFoundException(e.ToString());
             }
             ffbEnabled = false;
             constantForceEnabled = false;
@@ -195,6 +197,7 @@ namespace UnityFFB
             catch (DllNotFoundException e)
             {
                 LogMissingRuntimeError();
+                throw new DllNotFoundException(e.ToString());
             }
         }
 
@@ -222,6 +225,7 @@ namespace UnityFFB
             catch (DllNotFoundException e)
             {
                 LogMissingRuntimeError();
+                throw new DllNotFoundException(e.ToString());
             }
         }
 
@@ -236,6 +240,7 @@ namespace UnityFFB
             catch (DllNotFoundException e)
             {
                 LogMissingRuntimeError();
+                throw new DllNotFoundException(e.ToString());
             }
         }
 
