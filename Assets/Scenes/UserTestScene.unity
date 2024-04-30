@@ -4466,8 +4466,35 @@ PrefabInstance:
     - {fileID: 8660062444786936929, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1315103787050065456, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 937785834}
   m_SourcePrefab: {fileID: 100100000, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
+--- !u!1 &937785833 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1315103787050065456, guid: 2e6c07efbd8e77343ac14ba733a92d80, type: 3}
+  m_PrefabInstance: {fileID: 937785832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &937785834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937785833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03311296687ef4948845bf6ff7291f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containers:
+  - {fileID: 6282510486798761145, guid: 7a55bc62a35ab06458ed656ff03a4661, type: 3}
+  - {fileID: 8865053870220952839, guid: bb88c46d0d0b2ae4c85aa44eebad4a71, type: 3}
+  - {fileID: 3090049137198529822, guid: a5a7ea1ad55baf044b06434cdc0d9f74, type: 3}
+  - {fileID: 9072146460383376541, guid: b3938653723392f48941988bc5309b9c, type: 3}
+  - {fileID: 6938520001633207706, guid: 080430e4c6a440f49b85ee80f51d1643, type: 3}
+  - {fileID: 1210152044472166805, guid: 1c6177726fa781041907e98a85770aa2, type: 3}
 --- !u!1 &952452012 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6287726720289967591, guid: 492cf9552d3525b4299744077f334246, type: 3}
@@ -6678,6 +6705,7 @@ MonoBehaviour:
   CollisionDetection: {fileID: 1990151665}
   crane: {fileID: 0}
   audio: {fileID: 0}
+  ContainerYardPreInstantiatedList: []
 --- !u!1 &1717047618
 GameObject:
   m_ObjectHideFlags: 0
@@ -7863,7 +7891,7 @@ MonoBehaviour:
   MaxY: 90
   angle: 0
   distance: 0
-  AccuracyFinder: {fileID: 0}
+  AccuracyFinder: {fileID: 1643921358}
 --- !u!65 &1990151659
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7975,6 +8003,8 @@ MonoBehaviour:
   EnableCollisionNotification: 0
   EnableGuidanceNotificaton: 0
   Margin: 3.18
+  Guidance1: {fileID: 8300000, guid: 93704b7c90c5a0e4e9ef9f7842567d96, type: 3}
+  Guidance2: {fileID: 8300000, guid: 41003bb94d1fdf949b1d637cfc460ecd, type: 3}
 --- !u!65 &1990151667
 BoxCollider:
   m_ObjectHideFlags: 0

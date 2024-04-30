@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static UnityEditor.Progress;
 
 public class ContainerYardScript : MonoBehaviour
 {
@@ -10,22 +11,58 @@ public class ContainerYardScript : MonoBehaviour
 
     private List<Vector3Int> pointersTakeable;
     private List<Vector3Int> pointersPlaceable;
-    bool RunOnce = false;
+    bool RunOnce = true;
     public bool PeekPlace => pointersPlaceable.Count > 0;
 
     public bool PeekTake => pointersTakeable.Count > 0;
+
+    public int PeekSize => pointersTakeable.Count;
+
+    public GameObject[] containers;
+
 
     void Start()
     {
         CellSize = Prefab.GetComponent<BoxCollider>().size + new Vector3(0.5f, 0.5f, 0.5f);
         pointersTakeable = new List<Vector3Int>();
         pointersPlaceable = new List<Vector3Int>();
-
+        Height = 3;
+        Width = 4;
+        Length = 4;
         InitializeGridPointers();
+        
+        
     }
 
     private void Update()
     {
+        if (RunOnce)
+        {
+            System.Random r = new System.Random();
+
+            if (StaticDataManager.Instance.ContainersLoaded.Count <= 0)
+            {
+                for (int i = 0; i < 38; i++)
+                {
+                    var NotNullPosition = AskPlace();
+                    int containerRandom = r.Next() % containers.Length;
+                    StaticDataManager.Instance.ContainersLoaded.Add(NotNullPosition);
+                    Instantiate(containers[containerRandom], (Vector3)NotNullPosition, gameObject.transform.rotation);
+                }
+                StaticDataManager.Instance.pointersTakeablestatic = pointersTakeable;
+                StaticDataManager.Instance.pointersPlaceablestatic = pointersPlaceable;
+            }
+            else
+            {
+                foreach (var container in StaticDataManager.Instance.ContainersLoaded) {
+                    int containerRandom = r.Next() % containers.Length;
+                    Instantiate(containers[containerRandom], (Vector3)container, gameObject.transform.rotation);
+                }
+                pointersTakeable = StaticDataManager.Instance.pointersTakeablestatic;
+                pointersPlaceable = StaticDataManager.Instance.pointersPlaceablestatic;
+            }
+            RunOnce = false;
+        }
         //if (!RunOnce)
         //{
         //    if (transform.parent.CompareTag("Ship"))

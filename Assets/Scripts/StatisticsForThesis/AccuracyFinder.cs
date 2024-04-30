@@ -19,6 +19,10 @@ public class AccuracyFinder : MonoBehaviour
     GameObject StatisticsCanvas;
     GameObject ControlUI;
 
+    bool Guidance1, Guidance2;
+
+    public List<Vector3Int> ContainerYardPreInstantiatedList = new List<Vector3Int>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,8 +32,8 @@ public class AccuracyFinder : MonoBehaviour
         audio = GameObject.FindGameObjectWithTag("PanamaxCrane").GetComponent<RayCastAroundCrane>();
 
         shipstorage.Height = 3;
-        shipstorage.Width = 2;
-        shipstorage.Length = 2;
+        shipstorage.Width = 4;
+        shipstorage.Length = 4;
 
 
         switch (PlayerPrefs.GetInt("Scenario"))
@@ -44,17 +48,17 @@ public class AccuracyFinder : MonoBehaviour
                 audio.EnableCollisionNotification = false;
                 audio.EnableGuidanceNotificaton = false;
                 break;
-            case 3: // Audio Guidance Only
+            case 3: // Audio Guidance1
                 crane.ForceFeedback = false;
                 audio.EnableCollisionNotification = false;
                 audio.EnableGuidanceNotificaton = true;
                 break;
-            case 4: // Audio Collisions Only
+            case 4: // Audio Guidance2
                 crane.ForceFeedback = false;
-                audio.EnableCollisionNotification = true;
-                audio.EnableGuidanceNotificaton = false;
+                audio.EnableCollisionNotification = false;
+                audio.EnableGuidanceNotificaton = true;
                 break;
-            case 5: // Force Feedback and Guidance
+            case 5: // Force Feedback and Guidance1
                 crane.ForceFeedback = true;
                 audio.EnableCollisionNotification = false;
                 audio.EnableGuidanceNotificaton = true;
@@ -79,15 +83,16 @@ public class AccuracyFinder : MonoBehaviour
                 audio.EnableCollisionNotification = true;
                 audio.EnableGuidanceNotificaton = true;
                 crane.JoystickControl = false;
-                shipstorage.Height = 1;
-                shipstorage.Width = 2;
-                shipstorage.Length = 2;
                 crane.speed = 30;
                 break;
             default: 
                 break;
         }
-        TargetContainers = shipstorage.Height * shipstorage.Width * shipstorage.Length;
+        crane.JoystickControl = false;
+        crane.KeyboardControl = true;
+        
+        TargetContainers = 1; //shipstorage.Height * shipstorage.Width * shipstorage.Length;
+
 
     }
 
@@ -108,17 +113,23 @@ public class AccuracyFinder : MonoBehaviour
     {
         StatisticsCanvas.SetActive(true);
         ControlUI.SetActive(false);
-
+        
         var threshold = 2;
         var avg = Accuracies.Sum(x => x) / Accuracies.Count;
+        if (PlayerPrefs.GetInt("Scenario") == 3) { Guidance1 = true; Guidance2 = false; }
+        else { Guidance2 = true; Guidance1 = false; }
         StreamWriter streamWriter = new StreamWriter(@"../Data/Data" + $"{PlayerPrefs.GetString("PlayerName")}" + $"{PlayerPrefs.GetInt("Scenario")}.txt");
-        var formula = (1 - avg / threshold) * 100;
-        formula = Math.Max(0, Math.Min(100, formula));
-        streamWriter.Write($"Scenario Selected: {PlayerPrefs.GetInt("Scenario")} (ForceFeedback: {crane.ForceFeedback}, CollisionAudio: {audio.EnableCollisionNotification}, GuidanceAudio: {audio.EnableGuidanceNotificaton})\n");
-        streamWriter.Write( formula + $"% Accuracy (Worst: {Accuracies.Max(x => x),5:0.000}m, Best: {Accuracies.Min(x => x),5:0.000}m) ");
+        streamWriter.Write($"Scenario Selected: {PlayerPrefs.GetInt("Scenario")} (ForceFeedback: {crane.ForceFeedback}, GuidanceAudio1: {Guidance1}, GuidanceAudio2: {Guidance2})\n");
+        streamWriter.Write($"Accuracy: (Worst: {Accuracies.Max(x => x),5:0.000}m, Best: {Accuracies.Min(x => x),5:0.000}m)\n Average Accuracy: {Accuracies.Average()}m\n");
+
+        streamWriter.Write("All Accuracies:\n");
+        foreach (var item in Accuracies.Select(x => x))
+        {
+            streamWriter.Write(item + "m\n");
+        }
         print("Wrote to AccuracyData");
 
-        StatisticsCanvas.transform.Find("Statistics").Find("StatisticsText").gameObject.GetComponent<TextMeshProUGUI>().text += "\n" + formula + $"% Accuracy (Worst: {Accuracies.Max(x => x),5:0.000}m, Best: {Accuracies.Min(x => x),5:0.000}m)";
+        StatisticsCanvas.transform.Find("Statistics").Find("StatisticsText").gameObject.GetComponent<TextMeshProUGUI>().text += $"\nAccuracy: (Worst: {Accuracies.Max(x => x),5:0.000}m, Best: {Accuracies.Min(x => x),5:0.000}m)\nAverage Accuracy: {Accuracies.Average()}m";
 
         streamWriter.Flush();
         streamWriter.WriteLine($"\nTime Elapsed for Task: {Time.Minutes} minutes, {Time.Seconds} Seconds");

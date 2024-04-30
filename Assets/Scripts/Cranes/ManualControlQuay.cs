@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ManualControlQuay : MonoBehaviour
 {// public CameraController cameraController;
@@ -322,7 +323,10 @@ public class ManualControlQuay : MonoBehaviour
             }
         }
 
-
+        if (Input.GetKey(KeyCode.C))
+        {
+            SceneManager.LoadScene(0);
+        }
         //if (Input.GetKey(KeyCode.C)) 
         //{ 
         //    main.enabled = !main.enabled; 
@@ -348,12 +352,19 @@ public class ManualControlQuay : MonoBehaviour
     /// <returns>Container from first truck in queue</returns>
     GameObject ContainerOnTruck()
     {
-        var gameobj = GameObject.FindGameObjectsWithTag("ExternalTruck").First();
-        var container = gameobj.transform.Find("Trailer").GetChild(0).gameObject;
+        if (GameObject.FindGameObjectsWithTag("ExternalTruck").Length != 0)
+        {
+            var gameobj = GameObject.FindGameObjectsWithTag("ExternalTruck").First();
+            var container = gameobj.transform.Find("Trailer").GetChild(0).gameObject;
 
-        print(container.name);
+            print(container.name);
 
-        return container;
+            return container;
+        }
+
+        else { return ContainerOnTruck(); }
+
+        
     }
 
     

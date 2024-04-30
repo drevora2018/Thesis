@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class RayCastAroundCrane : MonoBehaviour
 {
@@ -27,6 +22,8 @@ public class RayCastAroundCrane : MonoBehaviour
     [Range(0f, 5f)]public float Margin;
 
     bool TruckBeep;
+
+    public AudioClip Guidance1, Guidance2;
 
 
     void Start()
@@ -106,6 +103,16 @@ public class RayCastAroundCrane : MonoBehaviour
     {
         if(EnableGuidanceNotificaton)
         {
+            if (PlayerPrefs.GetInt("Scenario") == 3)
+            {
+                PutDownBeep.clip = Guidance1;
+            }
+            else
+            {
+                PutDownBeep.clip = Guidance2;
+            }
+
+
             if (controlQuay.distance > 3) PutDownBeep.Stop();
             else if (!TruckBeep)
             {

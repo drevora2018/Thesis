@@ -19,7 +19,7 @@ public class UserTestMenu : MonoBehaviour
     public ColorBlock BtnInactiveColor;
     private int scenarioSelected;
 
-
+    public static List<Vector3?> vector3s = new List<Vector3?>();
 
     public void Start()
     {
